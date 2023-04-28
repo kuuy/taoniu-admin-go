@@ -1,15 +1,11 @@
 package commands
 
 import (
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/urfave/cli/v2"
-
-	"taoniu.admin.local/account/api/v1/admin"
 )
 
 type ApiHandler struct{}
@@ -37,15 +33,9 @@ func (h *ApiHandler) run() error {
 
 	r := chi.NewRouter()
 	r.Route("/v1", func(r chi.Router) {
-		r.Mount("/login", admin.NewLoginRouter())
-		r.Mount("/logout", admin.NewLogoutRouter())
-		r.Mount("/token", admin.NewTokenRouter())
 	})
 
-	http.ListenAndServe(
-		fmt.Sprintf("127.0.0.1:%v", os.Getenv("ACCOUNT_API_PORT")),
-		r,
-	)
+	http.ListenAndServe("127.0.0.1:3600", r)
 
 	return nil
 }

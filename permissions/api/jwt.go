@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 	"strings"
-	"taoniu.admin.local/account/repositories/admin"
+
+	repositories "taoniu.admin.local/permissions/repositories"
 )
 
 type JwtHandler struct{}
@@ -20,7 +21,7 @@ func Authenticator(next http.Handler) http.Handler {
 			return
 		}
 
-		repository := &admin.TokenRepository{}
+		repository := &repositories.TokenRepository{}
 		uid, err := repository.Uid(bearer[7:])
 		if err != nil {
 			if uid != "" {

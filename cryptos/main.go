@@ -8,7 +8,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/urfave/cli/v2"
 
-	"taoniu.admin.local/account/commands"
+	"taoniu.admin.local/cryptos/commands"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	}
 
 	app := &cli.App{
-		Name:  "account commands",
+		Name:  "cryptos commands",
 		Usage: "",
 		Action: func(c *cli.Context) error {
 			if c.Command.Action == nil {
@@ -35,7 +35,6 @@ func main() {
 		Commands: []*cli.Command{
 			commands.NewApiCommand(),
 			commands.NewDbCommand(),
-			commands.NewAdminCommand(),
 		},
 		Version: "0.0.0",
 	}

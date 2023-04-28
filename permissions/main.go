@@ -1,28 +1,15 @@
 package main
 
 import (
+	"github.com/urfave/cli/v2"
 	"log"
 	"os"
-	"path"
-
-	"github.com/joho/godotenv"
-	"github.com/urfave/cli/v2"
-
-	"taoniu.admin.local/account/commands"
+	"taoniu.admin.local/permissions/commands"
 )
 
 func main() {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		panic(err)
-	}
-	err = godotenv.Load(path.Join(home, "taoniu-admin-go", ".env"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	app := &cli.App{
-		Name:  "account commands",
+		Name:  "permissions commands",
 		Usage: "",
 		Action: func(c *cli.Context) error {
 			if c.Command.Action == nil {
@@ -35,12 +22,11 @@ func main() {
 		Commands: []*cli.Command{
 			commands.NewApiCommand(),
 			commands.NewDbCommand(),
-			commands.NewAdminCommand(),
 		},
 		Version: "0.0.0",
 	}
 
-	err = app.Run(os.Args)
+	err := app.Run(os.Args)
 	if err != nil {
 		log.Fatalln("error", err)
 	}

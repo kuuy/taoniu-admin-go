@@ -6,8 +6,8 @@ import (
 	"github.com/urfave/cli/v2"
 	"gorm.io/gorm"
 
-	"taoniu.admin.local/account/common"
-	"taoniu.admin.local/account/models"
+	"taoniu.admin.local/permissions/common"
+	"taoniu.admin.local/permissions/models"
 )
 
 type DbHandler struct {
@@ -42,6 +42,8 @@ func NewDbCommand() *cli.Command {
 
 func (h *DbHandler) migrate() error {
 	log.Println("process migrator")
-	models.NewAdmin().AutoMigrate(h.Db)
+	h.Db.AutoMigrate(
+		&models.Role{},
+	)
 	return nil
 }
