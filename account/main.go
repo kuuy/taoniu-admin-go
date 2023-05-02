@@ -1,47 +1,47 @@
 package main
 
 import (
-	"log"
-	"os"
-	"path"
+  "log"
+  "os"
+  "path"
 
-	"github.com/joho/godotenv"
-	"github.com/urfave/cli/v2"
+  "github.com/joho/godotenv"
+  "github.com/urfave/cli/v2"
 
-	"taoniu.admin.local/account/commands"
+  "taoniu.local/admin/account/commands"
 )
 
 func main() {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		panic(err)
-	}
-	err = godotenv.Load(path.Join(home, "taoniu-admin-go", ".env"))
-	if err != nil {
-		log.Fatal(err)
-	}
+  home, err := os.UserHomeDir()
+  if err != nil {
+    panic(err)
+  }
+  err = godotenv.Load(path.Join(home, "taoniu-admin-go", ".env"))
+  if err != nil {
+    log.Fatal(err)
+  }
 
-	app := &cli.App{
-		Name:  "account commands",
-		Usage: "",
-		Action: func(c *cli.Context) error {
-			if c.Command.Action == nil {
-				cli.ShowAppHelp(c)
-			} else {
-				log.Fatalln("error", c.Err)
-			}
-			return nil
-		},
-		Commands: []*cli.Command{
-			commands.NewApiCommand(),
-			commands.NewDbCommand(),
-			commands.NewAdminCommand(),
-		},
-		Version: "0.0.0",
-	}
+  app := &cli.App{
+    Name:  "account commands",
+    Usage: "",
+    Action: func(c *cli.Context) error {
+      if c.Command.Action == nil {
+        cli.ShowAppHelp(c)
+      } else {
+        log.Fatalln("error", c.Err)
+      }
+      return nil
+    },
+    Commands: []*cli.Command{
+      commands.NewApiCommand(),
+      commands.NewDbCommand(),
+      commands.NewAdminCommand(),
+    },
+    Version: "0.0.0",
+  }
 
-	err = app.Run(os.Args)
-	if err != nil {
-		log.Fatalln("error", err)
-	}
+  err = app.Run(os.Args)
+  if err != nil {
+    log.Fatalln("error", err)
+  }
 }

@@ -1,4 +1,4 @@
-module taoniu.admin.local/permissions
+module taoniu.local/admin/permissions
 
 go 1.18
 

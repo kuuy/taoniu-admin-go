@@ -1,103 +1,103 @@
 package admin
 
 import (
-	"net/http"
+  "net/http"
 
-	"github.com/go-chi/chi/v5"
-	"gorm.io/gorm"
+  "github.com/go-chi/chi/v5"
+  "gorm.io/gorm"
 
-	"taoniu.admin.local/account/api"
-	"taoniu.admin.local/account/common"
-	repositories "taoniu.admin.local/account/repositories/admin"
+  "taoniu.local/admin/account/api"
+  "taoniu.local/admin/account/common"
+  repositories "taoniu.local/admin/account/repositories/admin"
 )
 
 type LoginHandler struct {
-	Db              *gorm.DB
-	Response        *api.ResponseHandler
-	UserRepository  *repositories.UsersRepository
-	TokenRepository *repositories.TokenRepository
+  Db              *gorm.DB
+  Response        *api.ResponseHandler
+  UserRepository  *repositories.UsersRepository
+  TokenRepository *repositories.TokenRepository
 }
 
 type Token struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
+  AccessToken  string `json:"access_token"`
+  RefreshToken string `json:"refresh_token"`
 }
 
 func NewLoginRouter() http.Handler {
-	h := LoginHandler{
-		Db: common.NewDB(),
-	}
+  h := LoginHandler{
+    Db: common.NewDB(),
+  }
 
-	r := chi.NewRouter()
-	r.Post("/", h.Do)
+  r := chi.NewRouter()
+  r.Post("/", h.Do)
 
-	return r
+  return r
 }
 
 func (h *LoginHandler) Users() *repositories.UsersRepository {
-	if h.UserRepository == nil {
-		h.UserRepository = &repositories.UsersRepository{
-			Db: h.Db,
-		}
-	}
-	return h.UserRepository
+  if h.UserRepository == nil {
+    h.UserRepository = &repositories.UsersRepository{
+      Db: h.Db,
+    }
+  }
+  return h.UserRepository
 }
 
 func (h *LoginHandler) Token() *repositories.TokenRepository {
-	if h.TokenRepository == nil {
-		h.TokenRepository = &repositories.TokenRepository{}
-	}
-	return h.TokenRepository
+  if h.TokenRepository == nil {
+    h.TokenRepository = &repositories.TokenRepository{}
+  }
+  return h.TokenRepository
 }
 
 func (h *LoginHandler) Do(
-	w http.ResponseWriter,
-	r *http.Request,
+  w http.ResponseWriter,
+  r *http.Request,
 ) {
-	h.Response = &api.ResponseHandler{
-		Writer: w,
-	}
+  h.Response = &api.ResponseHandler{
+    Writer: w,
+  }
 
-	r.ParseMultipartForm(1024)
+  r.ParseMultipartForm(1024)
 
-	if r.Form.Get("email") == "" {
-		h.Response.Error(http.StatusForbidden, 1004, "email is empty")
-		return
-	}
+  if r.Form.Get("email") == "" {
+    h.Response.Error(http.StatusForbidden, 1004, "email is empty")
+    return
+  }
 
-	if r.Form.Get("password") == "" {
-		h.Response.Error(http.StatusForbidden, 1004, "password is empty")
-		return
-	}
+  if r.Form.Get("password") == "" {
+    h.Response.Error(http.StatusForbidden, 1004, "password is empty")
+    return
+  }
 
-	email := r.Form.Get("email")
-	password := r.Form.Get("password")
+  email := r.Form.Get("email")
+  password := r.Form.Get("password")
 
-	user := h.Users().Get(email)
-	if user == nil {
-		h.Response.Error(http.StatusForbidden, 1000, "email or password not exists")
-		return
-	}
-	if !common.VerifyPassword(password, user.Salt, user.Password) {
-		h.Response.Error(http.StatusForbidden, 1000, "email or password not exists")
-		return
-	}
+  user := h.Users().Get(email)
+  if user == nil {
+    h.Response.Error(http.StatusForbidden, 1000, "email or password not exists")
+    return
+  }
+  if !common.VerifyPassword(password, user.Salt, user.Password) {
+    h.Response.Error(http.StatusForbidden, 1000, "email or password not exists")
+    return
+  }
 
-	accessToken, err := h.Token().AccessToken(user.ID)
-	if err != nil {
-		h.Response.Error(http.StatusInternalServerError, 500, "server error")
-		return
-	}
-	refreshToken, err := h.Token().RefreshToken(user.ID)
-	if err != nil {
-		h.Response.Error(http.StatusInternalServerError, 500, "server error")
-		return
-	}
+  accessToken, err := h.Token().AccessToken(user.ID)
+  if err != nil {
+    h.Response.Error(http.StatusInternalServerError, 500, "server error")
+    return
+  }
+  refreshToken, err := h.Token().RefreshToken(user.ID)
+  if err != nil {
+    h.Response.Error(http.StatusInternalServerError, 500, "server error")
+    return
+  }
 
-	token := &Token{
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
-	}
+  token := &Token{
+    AccessToken:  accessToken,
+    RefreshToken: refreshToken,
+  }
 
-	h.Response.Json(token)
+  h.Response.Json(token)
 }

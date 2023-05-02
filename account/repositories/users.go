@@ -1,52 +1,52 @@
 package repositories
 
 import (
-	"errors"
+  "errors"
 
-	"github.com/rs/xid"
-	"gorm.io/gorm"
+  "github.com/rs/xid"
+  "gorm.io/gorm"
 
-	"taoniu.admin.local/account/common"
-	"taoniu.admin.local/account/models"
+  "taoniu.local/admin/account/common"
+  "taoniu.local/admin/account/models"
 )
 
 type UsersRepository struct {
-	Db *gorm.DB
+  Db *gorm.DB
 }
 
 func (r *UsersRepository) Get(email string) *models.User {
-	var entity models.User
-	result := r.Db.Where(
-		"email=?",
-		email,
-	).Take(&entity)
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return nil
-	}
+  var entity models.User
+  result := r.Db.Where(
+    "email=?",
+    email,
+  ).Take(&entity)
+  if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+    return nil
+  }
 
-	return &entity
+  return &entity
 }
 
 func (r *UsersRepository) Create(email string, password string) error {
-	var entity models.User
-	result := r.Db.Where(
-		"email=?",
-		email,
-	).Take(&entity)
-	if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return errors.New("user already exists")
-	}
-	salt := common.GenerateSalt(16)
-	hashedPassword := common.GeneratePassword(password, salt)
+  var entity models.User
+  result := r.Db.Where(
+    "email=?",
+    email,
+  ).Take(&entity)
+  if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
+    return errors.New("user already exists")
+  }
+  salt := common.GenerateSalt(16)
+  hashedPassword := common.GeneratePassword(password, salt)
 
-	entity = models.User{
-		ID:       xid.New().String(),
-		Email:    email,
-		Password: hashedPassword,
-		Salt:     salt,
-		Status:   1,
-	}
-	r.Db.Create(&entity)
+  entity = models.User{
+    ID:       xid.New().String(),
+    Email:    email,
+    Password: hashedPassword,
+    Salt:     salt,
+    Status:   1,
+  }
+  r.Db.Create(&entity)
 
-	return nil
+  return nil
 }

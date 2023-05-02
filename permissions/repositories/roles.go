@@ -1,26 +1,26 @@
 package repositories
 
 import (
-	"errors"
+  "errors"
 
-	"gorm.io/gorm"
+  "gorm.io/gorm"
 
-	"taoniu.admin.local/permissions/models"
+  "taoniu.local/admin/permissions/models"
 )
 
 type RolesRepository struct {
-	Db *gorm.DB
+  Db *gorm.DB
 }
 
 func (r *RolesRepository) Get(email string) *models.Role {
-	var entity models.Role
-	result := r.Db.Where(
-		"email=?",
-		email,
-	).Take(&entity)
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return nil
-	}
+  var entity models.Role
+  result := r.Db.Where(
+    "email=?",
+    email,
+  ).Take(&entity)
+  if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+    return nil
+  }
 
-	return &entity
+  return &entity
 }

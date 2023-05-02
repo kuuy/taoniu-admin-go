@@ -1,4 +1,4 @@
-module taoniu.admin.local/account
+module taoniu.local/admin/account
 
 go 1.18
 

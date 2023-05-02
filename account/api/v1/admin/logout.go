@@ -1,28 +1,28 @@
 package admin
 
 import (
-	"net/http"
+  "net/http"
 
-	"github.com/go-chi/chi/v5"
+  "github.com/go-chi/chi/v5"
 
-	"taoniu.admin.local/account/api"
+  "taoniu.local/admin/account/api"
 )
 
 type LogoutHandler struct{}
 
 func NewLogoutRouter() http.Handler {
-	h := LogoutHandler{}
+  h := LogoutHandler{}
 
-	r := chi.NewRouter()
-	r.Use(api.Authenticator)
-	r.Get("/", h.Do)
+  r := chi.NewRouter()
+  r.Use(api.Authenticator)
+  r.Get("/", h.Do)
 
-	return r
+  return r
 }
 
 func (h *LogoutHandler) Do(
-	w http.ResponseWriter,
-	r *http.Request,
+  w http.ResponseWriter,
+  r *http.Request,
 ) {
 
 }

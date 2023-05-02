@@ -2,15 +2,15 @@ package commands
 
 import (
   "github.com/urfave/cli/v2"
-  "taoniu.local/admin/account/commands/admin"
+  "taoniu.local/admin/cryptos/commands/binance"
 )
 
-func NewAdminCommand() *cli.Command {
+func NewBinanceCommand() *cli.Command {
   return &cli.Command{
-    Name:  "admin",
+    Name:  "binance",
     Usage: "",
     Subcommands: []*cli.Command{
-      admin.NewUsersCommand(),
+      binance.NewSpotCommand(),
     },
   }
 }
