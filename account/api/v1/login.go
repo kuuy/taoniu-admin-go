@@ -1,6 +1,7 @@
-package admin
+package v1
 
 import (
+  "encoding/json"
   "net/http"
 
   "github.com/go-chi/chi/v5"
@@ -21,6 +22,11 @@ type LoginHandler struct {
 type Token struct {
   AccessToken  string `json:"access_token"`
   RefreshToken string `json:"refresh_token"`
+}
+
+type LoginParams struct {
+  Email    string `json:"email"`
+  Password string `json:"password"`
 }
 
 func NewLoginRouter() http.Handler {
@@ -58,27 +64,19 @@ func (h *LoginHandler) Do(
     Writer: w,
   }
 
-  r.ParseMultipartForm(1024)
-
-  if r.Form.Get("email") == "" {
-    h.Response.Error(http.StatusForbidden, 1004, "email is empty")
+  var params LoginParams
+  err := json.NewDecoder(r.Body).Decode(&params)
+  if err != nil {
+    h.Response.Error(http.StatusForbidden, 1004, "request not valid")
     return
   }
 
-  if r.Form.Get("password") == "" {
-    h.Response.Error(http.StatusForbidden, 1004, "password is empty")
-    return
-  }
-
-  email := r.Form.Get("email")
-  password := r.Form.Get("password")
-
-  user := h.Users().Get(email)
+  user := h.Users().Get(params.Email)
   if user == nil {
     h.Response.Error(http.StatusForbidden, 1000, "email or password not exists")
     return
   }
-  if !common.VerifyPassword(password, user.Salt, user.Password) {
+  if !common.VerifyPassword(params.Password, user.Salt, user.Password) {
     h.Response.Error(http.StatusForbidden, 1000, "email or password not exists")
     return
   }

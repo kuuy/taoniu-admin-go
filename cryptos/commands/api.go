@@ -1,46 +1,49 @@
 package commands
 
 import (
-	"fmt"
-	"log"
-	"net/http"
-	"os"
+  "fmt"
+  "log"
+  "net/http"
+  "os"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/urfave/cli/v2"
+  "github.com/go-chi/chi/v5"
+  "github.com/urfave/cli/v2"
+
+  "taoniu.local/admin/cryptos/api/v1"
 )
 
 type ApiHandler struct{}
 
 func NewApiCommand() *cli.Command {
-	var h ApiHandler
-	return &cli.Command{
-		Name:  "api",
-		Usage: "",
-		Before: func(c *cli.Context) error {
-			h = ApiHandler{}
-			return nil
-		},
-		Action: func(c *cli.Context) error {
-			if err := h.run(); err != nil {
-				return cli.Exit(err.Error(), 1)
-			}
-			return nil
-		},
-	}
+  var h ApiHandler
+  return &cli.Command{
+    Name:  "api",
+    Usage: "",
+    Before: func(c *cli.Context) error {
+      h = ApiHandler{}
+      return nil
+    },
+    Action: func(c *cli.Context) error {
+      if err := h.run(); err != nil {
+        return cli.Exit(err.Error(), 1)
+      }
+      return nil
+    },
+  }
 }
 
 func (h *ApiHandler) run() error {
-	log.Println("api running...")
+  log.Println("api running...")
 
-	r := chi.NewRouter()
-	r.Route("/v1", func(r chi.Router) {
-	})
+  r := chi.NewRouter()
+  r.Route("/v1", func(r chi.Router) {
+    r.Mount("/binance", v1.NewBinanceRouter())
+  })
 
-	http.ListenAndServe(
-		fmt.Sprintf("127.0.0.1:%v", os.Getenv("CRYPTOS_API_PORT")),
-		r,
-	)
+  http.ListenAndServe(
+    fmt.Sprintf("127.0.0.1:%v", os.Getenv("CRYPTOS_API_PORT")),
+    r,
+  )
 
-	return nil
+  return nil
 }

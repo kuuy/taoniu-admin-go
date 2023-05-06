@@ -1,4 +1,4 @@
-package admin
+package v1
 
 import (
   "net/http"
@@ -8,7 +8,9 @@ import (
   "taoniu.local/admin/account/api"
 )
 
-type LogoutHandler struct{}
+type LogoutHandler struct {
+  Response *api.ResponseHandler
+}
 
 func NewLogoutRouter() http.Handler {
   h := LogoutHandler{}
@@ -24,5 +26,8 @@ func (h *LogoutHandler) Do(
   w http.ResponseWriter,
   r *http.Request,
 ) {
-
+  h.Response = &api.ResponseHandler{
+    Writer: w,
+  }
+  h.Response.Json(nil)
 }

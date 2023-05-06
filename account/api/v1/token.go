@@ -1,6 +1,7 @@
-package admin
+package v1
 
 import (
+  "encoding/json"
   "github.com/go-chi/chi/v5"
   "net/http"
   "taoniu.local/admin/account/api"
@@ -14,6 +15,10 @@ type TokenHandler struct {
 
 type AccessToken struct {
   AccessToken string `json:"access_token"`
+}
+
+type RefreshParams struct {
+  RefreshToken string `json:"refresh_token"`
 }
 
 func NewTokenRouter() http.Handler {
@@ -40,15 +45,14 @@ func (h *TokenHandler) Refresh(
     Writer: w,
   }
 
-  r.ParseMultipartForm(1024)
-
-  if r.Form.Get("refresh_token") == "" {
-    h.Response.Error(http.StatusForbidden, 1004, "token is empty")
+  var params RefreshParams
+  err := json.NewDecoder(r.Body).Decode(&params)
+  if err != nil {
+    h.Response.Error(http.StatusForbidden, 1004, "request not valid")
     return
   }
 
-  refreshToken := r.Form.Get("refresh_token")
-  uid, err := h.Token().Uid(refreshToken)
+  uid, err := h.Token().Uid(params.RefreshToken)
   if err != nil {
     if uid != "" {
       h.Response.Error(http.StatusForbidden, 401, err.Error())

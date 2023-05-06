@@ -3,10 +3,10 @@ package fishers
 import (
   "context"
   "log"
+  services "taoniu.local/admin/cryptos/grpc/services/binance/spot/analysis/tradings/fishers"
 
   "github.com/urfave/cli/v2"
 
-  services "taoniu.local/admin/cryptos/grpc/services/binance/spot/analysis/tradings/fishers/chart"
   repositories "taoniu.local/admin/cryptos/repositories/binance/spot/analysis/tradings/fishers"
 )
 

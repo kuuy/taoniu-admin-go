@@ -11,6 +11,7 @@ func NewSpotCommand() *cli.Command {
     Usage: "",
     Subcommands: []*cli.Command{
       spot.NewAnalysisCommand(),
+      spot.NewTradingsCommand(),
     },
   }
 }

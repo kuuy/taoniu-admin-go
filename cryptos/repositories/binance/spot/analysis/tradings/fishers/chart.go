@@ -1,7 +1,7 @@
 package fishers
 
 import (
-  services "taoniu.local/admin/cryptos/grpc/services/binance/spot/analysis/tradings/fishers/chart"
+  services "taoniu.local/admin/cryptos/grpc/services/binance/spot/analysis/tradings/fishers"
 )
 
 type ChartRepository struct {

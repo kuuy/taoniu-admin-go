@@ -5,11 +5,10 @@ import (
   "log"
   "net/http"
   "os"
+  "taoniu.local/admin/account/api/v1"
 
   "github.com/go-chi/chi/v5"
   "github.com/urfave/cli/v2"
-
-  "taoniu.local/admin/account/api/v1/admin"
 )
 
 type ApiHandler struct{}
@@ -37,9 +36,10 @@ func (h *ApiHandler) run() error {
 
   r := chi.NewRouter()
   r.Route("/v1", func(r chi.Router) {
-    r.Mount("/login", admin.NewLoginRouter())
-    r.Mount("/logout", admin.NewLogoutRouter())
-    r.Mount("/token", admin.NewTokenRouter())
+    r.Mount("/login", v1.NewLoginRouter())
+    r.Mount("/logout", v1.NewLogoutRouter())
+    r.Mount("/profile", v1.NewProfileRouter())
+    r.Mount("/token", v1.NewTokenRouter())
   })
 
   http.ListenAndServe(

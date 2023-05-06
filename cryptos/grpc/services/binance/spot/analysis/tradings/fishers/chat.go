@@ -1,4 +1,4 @@
-package chart
+package fishers
 
 import (
   "context"
@@ -19,7 +19,7 @@ type Chart struct {
 func (srv *Chart) Client() pb.ChartClient {
   if srv.ChartClient == nil {
     conn, err := grpc.Dial(
-      fmt.Sprintf("127.0.0.1:%v", os.Getenv("CRYPTOS_GRPC_PORT")),
+      fmt.Sprintf("%v:%v", os.Getenv("CRYPTOS_GRPC_HOST"), os.Getenv("CRYPTOS_GRPC_PORT")),
       grpc.WithTransportCredentials(insecure.NewCredentials()),
     )
     if err != nil {
