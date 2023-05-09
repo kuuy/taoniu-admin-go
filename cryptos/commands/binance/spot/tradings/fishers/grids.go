@@ -3,10 +3,11 @@ package fishers
 import (
   "context"
   "log"
-  services "taoniu.local/admin/cryptos/grpc/services/binance/spot/tradings/fishers"
-  repositories "taoniu.local/admin/cryptos/repositories/binance/spot/tradings/fishers"
 
   "github.com/urfave/cli/v2"
+
+  services "taoniu.local/admin/cryptos/grpc/services/binance/spot/tradings/fishers"
+  repositories "taoniu.local/admin/cryptos/repositories/binance/spot/tradings/fishers"
 )
 
 type GridsHandler struct {
@@ -45,9 +46,10 @@ func NewGridsCommand() *cli.Command {
 }
 
 func (h *GridsHandler) Pagenate() error {
-  log.Println("binance spot analysis tradings fishers grids series...")
-
-  r, err := h.Repository.Pagenate(1, 15)
+  log.Println("binance spot tradings fishers grids pagenate...")
+  symbol := ""
+  status := []uint32{0, 1, 2}
+  r, err := h.Repository.Pagenate(symbol, status, 1, 15)
   if err != nil {
     return err
   }

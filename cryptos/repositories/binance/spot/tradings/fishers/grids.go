@@ -9,6 +9,11 @@ type GridsRepository struct {
   Service *services.Grids
 }
 
-func (r *GridsRepository) Pagenate(page int, pageSize int) (*pb.PagenateReply, error) {
-  return r.Service.Pagenate(page, pageSize)
+func (r *GridsRepository) Pagenate(
+  symbol string,
+  status []uint32,
+  page int,
+  pageSize int,
+) (*pb.PagenateReply, error) {
+  return r.Service.Pagenate(symbol, status, page, pageSize)
 }

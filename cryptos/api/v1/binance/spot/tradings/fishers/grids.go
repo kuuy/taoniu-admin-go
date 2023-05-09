@@ -52,28 +52,40 @@ func (h *GridsHandler) Pagenate(
     Writer: w,
   }
 
+  q := r.URL.Query()
+
+  symbol := q.Get("symbol")
+
+  var status []uint32
+  if q.Has("status[]") {
+    for _, value := range q["status[]"] {
+      number, _ := strconv.Atoi(value)
+      status = append(status, uint32(number))
+    }
+  }
+
   var current int
-  if !r.URL.Query().Has("current") {
+  if !q.Has("current") {
     current = 1
   }
-  current, _ = strconv.Atoi(r.URL.Query().Get("current"))
+  current, _ = strconv.Atoi(q.Get("current"))
   if current < 1 {
     h.Response.Error(http.StatusForbidden, 1004, "current not valid")
     return
   }
 
   var pageSize int
-  if !r.URL.Query().Has("page_size") {
+  if !q.Has("page_size") {
     pageSize = 50
   } else {
-    pageSize, _ = strconv.Atoi(r.URL.Query().Get("page_size"))
+    pageSize, _ = strconv.Atoi(q.Get("page_size"))
   }
   if pageSize < 1 || pageSize > 100 {
     h.Response.Error(http.StatusForbidden, 1004, "page size not valid")
     return
   }
 
-  pagenate, err := h.Repository.Pagenate(current, pageSize)
+  pagenate, err := h.Repository.Pagenate(symbol, status, current, pageSize)
   if err != nil {
     h.Response.Error(http.StatusForbidden, 500, err.Error())
     return

@@ -10,8 +10,10 @@ func NewSpotCommand() *cli.Command {
     Name:  "spot",
     Usage: "",
     Subcommands: []*cli.Command{
+      spot.NewMarketsCommand(),
       spot.NewAnalysisCommand(),
       spot.NewTradingsCommand(),
+      spot.NewMarginCommand(),
     },
   }
 }
