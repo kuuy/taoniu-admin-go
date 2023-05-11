@@ -9,5 +9,7 @@ import (
 func NewTradingsRouter() http.Handler {
   r := chi.NewRouter()
   r.Mount("/fishers", tradings.NewFishersRouter())
+  r.Mount("/scalping", tradings.NewScalpingRouter())
+  r.Mount("/triggers", tradings.NewTriggersRouter())
   return r
 }
