@@ -1,15 +1,15 @@
 syntax = "proto3";
 
-package taoniu.local.cryptos.grpc.binance.spot.margin.isolated.tradings.fishers.grids;
-option go_package = "taoniu.local/admin/cryptos/grpc/binance/spot/margin/isolated/tradings/fishers/grids";
+package taoniu.local.cryptos.grpc.binance.spot.tradings.triggers;
+option go_package = "taoniu.local/cryptos/grpc/binance/spot/tradings/triggers";
 
 import "google/protobuf/timestamp.proto";
 
-service Grids {
+service Triggers {
   rpc Pagenate (PagenateRequest) returns (PagenateReply) {}
 }
 
-message GridInfo {
+message TriggersInfo {
   string id = 1;
   string symbol = 2;
   float buyPrice = 3;
@@ -30,5 +30,5 @@ message PagenateRequest {
 
 message PagenateReply {
   int64 total = 1;
-  repeated GridInfo data = 2;
+  repeated TriggersInfo data = 2;
 }

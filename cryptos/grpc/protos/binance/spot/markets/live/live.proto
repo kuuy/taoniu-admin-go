@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package taoniu.local.cryptos.grpc.binance.spot.markets.live;
-option go_package = "taoniu.local/admin/cryptos/grpc/binance/spot/markets/live";
+option go_package = "taoniu.local/cryptos/grpc/binance/spot/markets/live";
 
 import "google/protobuf/timestamp.proto";
 
@@ -15,8 +15,8 @@ message LiveInfo {
   float price = 3;
   float high = 4;
   float low = 5;
-  float volume = 6;
-  float quota = 7;
+  double volume = 6;
+  double quota = 7;
   google.protobuf.Timestamp timestamp = 8;
 }
 
