@@ -30,10 +30,10 @@ func (srv *Live) Client() pb.LiveClient {
   return srv.LiveClient
 }
 
-func (srv *Live) Pagenate(symbol string, page int, pageSize int) (*pb.PagenateReply, error) {
+func (srv *Live) Pagenate(symbol string, current int, pageSize int) (*pb.PagenateReply, error) {
   r, err := srv.Client().Pagenate(srv.Ctx, &pb.PagenateRequest{
     Symbol:   symbol,
-    Page:     int32(page),
+    Current:  int32(current),
     PageSize: int32(pageSize),
   })
   if err != nil {

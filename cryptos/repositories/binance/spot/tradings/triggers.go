@@ -12,8 +12,8 @@ type TriggersRepository struct {
 func (r *TriggersRepository) Pagenate(
   symbol string,
   status []uint32,
-  page int,
+  current int,
   pageSize int,
 ) (*pb.PagenateReply, error) {
-  return r.Service.Pagenate(symbol, status, page, pageSize)
+  return r.Service.Pagenate(symbol, status, current, pageSize)
 }

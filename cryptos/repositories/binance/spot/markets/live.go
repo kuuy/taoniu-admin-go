@@ -11,8 +11,8 @@ type LiveRepository struct {
 
 func (r *LiveRepository) Pagenate(
   symbol string,
-  page int,
+  current int,
   pageSize int,
 ) (*pb.PagenateReply, error) {
-  return r.Service.Pagenate(symbol, page, pageSize)
+  return r.Service.Pagenate(symbol, current, pageSize)
 }

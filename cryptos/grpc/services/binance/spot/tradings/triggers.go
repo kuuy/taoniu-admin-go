@@ -30,11 +30,11 @@ func (srv *Triggers) Client() pb.TriggersClient {
   return srv.TriggersClient
 }
 
-func (srv *Triggers) Pagenate(symbol string, status []uint32, page int, pageSize int) (*pb.PagenateReply, error) {
+func (srv *Triggers) Pagenate(symbol string, status []uint32, current int, pageSize int) (*pb.PagenateReply, error) {
   r, err := srv.Client().Pagenate(srv.Ctx, &pb.PagenateRequest{
     Symbol:   symbol,
     Status:   status,
-    Page:     int32(page),
+    Current:  int32(current),
     PageSize: int32(pageSize),
   })
   if err != nil {

@@ -30,11 +30,11 @@ func (srv *Grids) Client() pb.GridsClient {
   return srv.GridsClient
 }
 
-func (srv *Grids) Pagenate(symbol string, status []uint32, page int, pageSize int) (*pb.PagenateReply, error) {
+func (srv *Grids) Pagenate(symbol string, status []uint32, current int, pageSize int) (*pb.PagenateReply, error) {
   r, err := srv.Client().Pagenate(srv.Ctx, &pb.PagenateRequest{
     Symbol:   symbol,
     Status:   status,
-    Page:     int32(page),
+    Current:  int32(current),
     PageSize: int32(pageSize),
   })
   if err != nil {
