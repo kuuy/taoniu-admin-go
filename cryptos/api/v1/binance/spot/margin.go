@@ -8,6 +8,7 @@ import (
 
 func NewMarginRouter() http.Handler {
   r := chi.NewRouter()
+  r.Mount("/cross", margin.NewCrossRouter())
   r.Mount("/isolated", margin.NewIsolatedRouter())
   return r
 }

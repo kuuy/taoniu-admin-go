@@ -13,6 +13,7 @@ func NewBinanceRouter() http.Handler {
   r := chi.NewRouter()
   r.Use(api.Authenticator)
   r.Mount("/spot", binance.NewSpotRouter())
+  r.Mount("/futures", binance.NewFuturesRouter())
 
   return r
 }
